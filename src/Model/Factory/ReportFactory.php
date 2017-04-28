@@ -15,7 +15,7 @@ class ReportFactory
      * @param string $prefix
      * @return Report
      */
-    public static function createFromArray($source, string $prefix = 'praw')
+    public function createFromArray($source, string $prefix = 'praw')
     {
         $address = Address::createFromArray($source, $prefix . '_adSiedz');
         $corAddress = Address::createFromArray($source, $prefix . '_adKor');
