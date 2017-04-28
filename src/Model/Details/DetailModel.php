@@ -13,7 +13,10 @@ abstract class DetailModel
         $dict = static::getDictionary($prefix);
         foreach($dict as $name => $field)
         {
-            $value = $source[$name];
+            if (isset($source[$name]))
+                $value = $source[$name];
+            else
+                $value = NULL;
             $contact->$field = $value;
         }
 
