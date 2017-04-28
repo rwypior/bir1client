@@ -12,7 +12,8 @@ class ReportResponse implements ResponseInterface
     protected $data;
 
     public function __construct($data)
-    {
+    {var_dump($data);die();
+        $factory = $this->getReportFactory();
         $reports = [];
 
         if ($data->DanePobierzPelnyRaportResult)
@@ -25,11 +26,16 @@ class ReportResponse implements ResponseInterface
                 foreach($set->children() as $entry)
                     $entries[$entry->getName()] = $entry->__toString();
 
-                $reports[] = ReportFactory::createFromArray($entries);
+                $reports[] = $factory->createFromArray($entries);
             }
 
             $this->data = $reports;
         }
+    }
+
+    protected function getReportFactory()
+    {
+        return new ReportFactory();
     }
 
     /**
