@@ -4,15 +4,23 @@ ini_set('display_errors', true);
 
 include('../vendor/autoload.php');
 
-$regon = new \RWypior\Regon\Client();
-$loginRequest = new \RWypior\Regon\Request\LoginRequest('apikey');
-/** @var \RWypior\Regon\Response\LoginResponse $response */
-$response = $regon->sendRequest($loginRequest);
+$regon = new \RWypior\Regon\Client(\RWypior\Regon\Client::SERVICE_TYPE_PROD);
+$regon->printRequests = false;
 
-var_dump($response);
+try {
+    $loginRequest = new \RWypior\Regon\Request\LoginRequest('apikey');
+    /** @var \RWypior\Regon\Response\LoginResponse $response */
+    $response = $regon->sendRequest($loginRequest);
 
-$logoutRequest = new \RWypior\Regon\Request\LogoutRequest($regon->getSessionId());
-/** @var \RWypior\Regon\Response\LogoutResponse $response */
-$response = $regon->sendRequest($logoutRequest);
+    var_dump($response);
 
-var_dump($response);
+    $logoutRequest = new \RWypior\Regon\Request\LogoutRequest($regon->getSessionId());
+    /** @var \RWypior\Regon\Response\LogoutResponse $response */
+    $response = $regon->sendRequest($logoutRequest);
+
+    var_dump($response);
+}
+catch(\Exception $ex)
+{
+    print_r($ex);
+}

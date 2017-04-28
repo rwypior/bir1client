@@ -2,6 +2,7 @@
 
 namespace RWypior\Regon;
 
+use RWypior\Regon\Exception\ClientException;
 use RWypior\Regon\Exception\RequestException;
 use RWypior\Regon\Exception\ResponseException;
 use RWypior\Regon\Response\LoginResponse;
@@ -10,15 +11,47 @@ class Client
 {
     const WSDL = 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/wsdl/UslugaBIRzewnPubl.xsd';
 
+    const SERVICE_TEST = 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc';
+    const SERVICE_PROD = 'https://wyszukiwarkaregon.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc';
+
+    /** @const int SERVICE_TYPE_TEST test environment service */
+    const SERVICE_TYPE_TEST = 1;
+
+    /** @const int SERVICE_TYPE_PROD production environment service */
+    const SERVICE_TYPE_PROD = 2;
+
     protected $sessionId = NULL;
+    protected $serviceType;
+    protected $service;
 
     public $printRequests = false;
+
+    /**
+     * @param int $serviceType service type to use, either SERVICE_TYPE_TEST or SERVICE_TYPE_PROD
+     * @throws ClientException when $serviceType is invalid
+     */
+    public function __construct(int $serviceType = self::SERVICE_TYPE_TEST)
+    {
+        $this->serviceType = $serviceType;
+
+        switch($this->serviceType)
+        {
+            case self::SERVICE_TYPE_TEST:
+                $this->service = self::SERVICE_TEST;
+                break;
+            case self::SERVICE_TYPE_PROD:
+                $this->service = self::SERVICE_PROD;
+                break;
+            default:
+                throw new ClientException("Unrecognized service type \"$serviceType\"");
+        }
+    }
 
     protected function getHeaders(RequestInterface $request)
     {
         return [
             new \SoapHeader('http://www.w3.org/2005/08/addressing', 'Action', $request->getAction()),
-            new \SoapHeader('http://www.w3.org/2005/08/addressing', 'To', 'https://wyszukiwarkaregontest.stat.gov.pl/wsBIR/UslugaBIRzewnPubl.svc')
+            new \SoapHeader('http://www.w3.org/2005/08/addressing', 'To', $this->service)
         ];
     }
 
@@ -32,7 +65,10 @@ class Client
             $options
         );
 
-        return new ExtSoapClient(self::WSDL, $allOptions);
+        $client = new ExtSoapClient(self::WSDL, $allOptions);
+        $client->__setLocation($this->service);
+
+        return $client;
     }
 
     protected function getSoapOptions()
@@ -52,10 +88,10 @@ class Client
     }
 
     /**
-     * @param RequestInterface $request
-     * @return ResponseInterface
-     * @throws RequestException
-     * @throws ResponseException
+     * @param RequestInterface $request request to send
+     * @return ResponseInterface resulting response
+     * @throws RequestException when sending request was impossible
+     * @throws ResponseException when client was unable to read resulting response
      */
     public function sendRequest(RequestInterface $request)
     {

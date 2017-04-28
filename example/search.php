@@ -4,13 +4,13 @@ ini_set('display_errors', true);
 
 include('../vendor/autoload.php');
 
-$regon = new \RWypior\Regon\Client();
+$regon = new \RWypior\Regon\Client(\RWypior\Regon\Client::SERVICE_TYPE_PROD);
 $regon->printRequests = false;
 
 $regon->sendRequest(new \RWypior\Regon\Request\LoginRequest('apikey'));
 
 $searchData = new \RWypior\Regon\Model\SearchData();
-$searchData->setRegon(['regon1', 'regon2']);
+$searchData->setRegon(['regon', 'regon2']);
 
 try {
     $request = new \RWypior\Regon\Request\SearchRequest($searchData);
