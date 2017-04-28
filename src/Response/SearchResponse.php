@@ -11,30 +11,33 @@ class SearchResponse implements ResponseInterface
 
     public function __construct($data)
     {
-        $xml = new \SimpleXMLElement($data->DaneSzukajResult);
-
         $this->searchResult = [];
 
-        foreach($xml->xpath('//root/dane') as $set)
+        if ($data->DaneSzukajResult)
         {
-            $entries = [];
-            foreach($set->children() as $entry)
-                $entries[$entry->getName()] = $entry->__toString();
+            $xml = new \SimpleXMLElement($data->DaneSzukajResult);
 
-            $searchResult = new SearchResult();
+            foreach($xml->xpath('//root/dane') as $set)
+            {
+                $entries = [];
+                foreach($set->children() as $entry)
+                    $entries[$entry->getName()] = $entry->__toString();
 
-            $searchResult->setRegon($entries['Regon'] ?? NULL);
-            $searchResult->setName($entries['Nazwa'] ?? NULL);
-            $searchResult->setVoivodeship($entries['Wojewodztwo'] ?? NULL);
-            $searchResult->setRegion($entries['Powiat'] ?? NULL);
-            $searchResult->setCommunity($entries['Gmina'] ?? NULL);
-            $searchResult->setLocality($entries['Miejscowosc'] ?? NULL);
-            $searchResult->setPostalCode($entries['KodPocztowy'] ?? NULL);
-            $searchResult->setStreet($entries['Ulica'] ?? NULL);
-            $searchResult->setType($entries['Typ'] ?? NULL);
-            $searchResult->setSilosId($entries['SilosID'] ?? NULL);
+                $searchResult = new SearchResult();
 
-            $this->searchResult[] = $searchResult;
+                $searchResult->setRegon($entries['Regon'] ?? NULL);
+                $searchResult->setName($entries['Nazwa'] ?? NULL);
+                $searchResult->setVoivodeship($entries['Wojewodztwo'] ?? NULL);
+                $searchResult->setRegion($entries['Powiat'] ?? NULL);
+                $searchResult->setCommunity($entries['Gmina'] ?? NULL);
+                $searchResult->setLocality($entries['Miejscowosc'] ?? NULL);
+                $searchResult->setPostalCode($entries['KodPocztowy'] ?? NULL);
+                $searchResult->setStreet($entries['Ulica'] ?? NULL);
+                $searchResult->setType($entries['Typ'] ?? NULL);
+                $searchResult->setSilosId($entries['SilosID'] ?? NULL);
+
+                $this->searchResult[] = $searchResult;
+            }
         }
     }
 
