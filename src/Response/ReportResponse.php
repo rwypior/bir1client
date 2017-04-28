@@ -12,7 +12,7 @@ class ReportResponse implements ResponseInterface
     protected $data;
 
     public function __construct($data)
-    {var_dump($data);die();
+    {
         $factory = $this->getReportFactory();
         $reports = [];
 
