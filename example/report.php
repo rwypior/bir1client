@@ -9,7 +9,7 @@ $regon = new \RWypior\Regon\Client(\RWypior\Regon\Client::SERVICE_TYPE_PROD);
 $regon->sendRequest(new \RWypior\Regon\Request\LoginRequest('apikey'));
 
 try {
-    $request = new \RWypior\Regon\Request\ReportRequest('regon', 'P', '6', \RWypior\Regon\Request\ReportRequest::REPORT_TYPE_ACTIVITY);
+    $request = new \RWypior\Regon\Request\ReportRequest('regon', 'P', '6');
     $response = $regon->sendRequest($request);
     var_dump($response);
 }

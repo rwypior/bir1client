@@ -33,6 +33,7 @@ class General extends DetailModel
             "{$prefix}_nazwa" => 'name',
             "{$prefix}_nazwaSkrocona" => 'shortName',
             "{$prefix}_numerWrejestrzeEwidencji" => 'registryNumber',
+            "{$prefix}_dataPowstania" => 'createdDate',
             "{$prefix}_dataRozpoczeciaDzialalnosci" => 'activityStartDate',
             "{$prefix}_dataWpisuDoREGON" => 'regonEntryDate',
             "{$prefix}_dataZawieszeniaDzialalnosci" => 'activitySuspensionDate',
