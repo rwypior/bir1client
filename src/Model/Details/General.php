@@ -16,6 +16,14 @@ class General extends DetailModel
     protected $name;
     protected $shortName;
     protected $registryNumber;
+    protected $createdDate;
+    protected $activityStartDate;
+    protected $regonEntryDate;
+    protected $activitySuspensionDate;
+    protected $activityResumeDate;
+    protected $changeDate;
+    protected $activityStopDate;
+    protected $regonRemoveDate;
 
     public static function getDictionary($prefix)
     {
@@ -24,7 +32,14 @@ class General extends DetailModel
             "{$prefix}_nip" => 'nip',
             "{$prefix}_nazwa" => 'name',
             "{$prefix}_nazwaSkrocona" => 'shortName',
-            "{$prefix}_numerWrejestrzeEwidencji" => 'registryNumber'
+            "{$prefix}_numerWrejestrzeEwidencji" => 'registryNumber',
+            "{$prefix}_dataRozpoczeciaDzialalnosci" => 'activityStartDate',
+            "{$prefix}_dataWpisuDoREGON" => 'regonEntryDate',
+            "{$prefix}_dataZawieszeniaDzialalnosci" => 'activitySuspensionDate',
+            "{$prefix}_dataWznowieniaDzialalnosci" => 'activityResumeDate',
+            "{$prefix}_dataZaistnieniaZmiany" => 'changeDate',
+            "{$prefix}_dataZakonczeniaDzialalnosci" => 'activityStopDate',
+            "{$prefix}_dataSkresleniazRegon" => 'regonRemoveDate',
         ];
     }
 

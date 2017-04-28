@@ -13,20 +13,23 @@ class ReportResponse implements ResponseInterface
 
     public function __construct($data)
     {
-        $xml = new \SimpleXMLElement($data->DanePobierzPelnyRaportResult);
-
         $reports = [];
 
-        foreach($xml->xpath('//root/dane') as $set)
+        if ($data->DanePobierzPelnyRaportResult)
         {
-            $entries = [];
-            foreach($set->children() as $entry)
-                $entries[$entry->getName()] = $entry->__toString();
+            $xml = new \SimpleXMLElement($data->DanePobierzPelnyRaportResult);
 
-            $reports[] = ReportFactory::createFromArray($entries);
+            foreach($xml->xpath('//root/dane') as $set)
+            {
+                $entries = [];
+                foreach($set->children() as $entry)
+                    $entries[$entry->getName()] = $entry->__toString();
+
+                $reports[] = ReportFactory::createFromArray($entries);
+            }
+
+            $this->data = $reports;
         }
-
-        $this->data = $reports;
     }
 
     /**
