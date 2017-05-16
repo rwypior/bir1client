@@ -2,9 +2,12 @@
 
 namespace RWypior\Regon\Request;
 
+use RWypior\Regon\Exception\ClientException;
 use RWypior\Regon\Model\ActivityReport;
 use RWypior\Regon\RequestInterface;
+use RWypior\Regon\Response\ActivityReportPhysicalResponse;
 use RWypior\Regon\Response\ActivityReportResponse;
+use RWypior\Regon\Response\ReportPhysicalResponse;
 use RWypior\Regon\Response\ReportResponse;
 
 class ReportRequest implements RequestInterface
@@ -28,11 +31,15 @@ class ReportRequest implements RequestInterface
 
     protected $regon;
     protected $reportName;
+    protected $reportType;
+    protected $type;
 
     public function __construct(string $regon, string $type, string $silosId, int $reportType = self::REPORT_TYPE_GENERAL)
     {
+        $this->type = $type;
         $this->regon = $regon;
         $this->reportName = self::getReportName($type, $silosId, $reportType);
+        $this->reportType = $reportType;
     }
 
     /**
@@ -85,10 +92,23 @@ class ReportRequest implements RequestInterface
 
     public function getExpectedResponse()
     {
-        if ($this->reportName == self::REPORT_NAME_ACTIVITY_LEGAL)
-            return ActivityReportResponse::class;
+        if ($this->type == 'P')
+        {
+            if ($this->reportType == self::REPORT_TYPE_ACTIVITY)
+                return ActivityReportResponse::class;
 
-        return ReportResponse::class;
+            return ReportResponse::class;
+        }
+
+        if ($this->type == 'F')
+        {
+            if ($this->reportType == self::REPORT_TYPE_ACTIVITY)
+                return ActivityReportPhysicalResponse::class;
+
+            return ReportPhysicalResponse::class;
+        }
+
+        throw new ClientException("Unrecognized company type \"{$this->type}\"");
     }
 
     public function getAction()

@@ -11,7 +11,8 @@ namespace RWypior\Regon\Model\Details;
 
 class General extends DetailModel
 {
-    protected $regon;
+    protected $regon14;
+    protected $regon9;
     protected $nip;
     protected $name;
     protected $shortName;
@@ -28,7 +29,8 @@ class General extends DetailModel
     public static function getDictionary($prefix)
     {
         return [
-            "{$prefix}_regon14" => 'regon',
+            "{$prefix}_regon14" => 'regon14',
+            "{$prefix}_regon9" => 'regon9',
             "{$prefix}_nip" => 'nip',
             "{$prefix}_nazwa" => 'name',
             "{$prefix}_nazwaSkrocona" => 'shortName',
@@ -49,7 +51,7 @@ class General extends DetailModel
      */
     public function getRegon()
     {
-        return $this->regon;
+        return $this->regon14 ? $this->regon14 : $this->regon9;
     }
 
     /**
@@ -58,7 +60,43 @@ class General extends DetailModel
      */
     public function setRegon($regon)
     {
-        $this->regon = $regon;
+        $this->regon9 = $this->regon14 = $regon;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRegon14()
+    {
+        return $this->regon14;
+    }
+
+    /**
+     * @param mixed $regon14
+     * @return General
+     */
+    public function setRegon14($regon14)
+    {
+        $this->regon14 = $regon14;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRegon9()
+    {
+        return $this->regon9;
+    }
+
+    /**
+     * @param mixed $regon9
+     * @return General
+     */
+    public function setRegon9($regon9)
+    {
+        $this->regon9 = $regon9;
         return $this;
     }
 

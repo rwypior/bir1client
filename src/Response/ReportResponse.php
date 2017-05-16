@@ -26,11 +26,16 @@ class ReportResponse implements ResponseInterface
                 foreach($set->children() as $entry)
                     $entries[$entry->getName()] = $entry->__toString();
 
-                $reports[] = $factory->createFromArray($entries);
+                $reports[] = $factory->createFromArray($entries, $this->getPrefix());
             }
 
             $this->data = $reports;
         }
+    }
+
+    protected function getPrefix()
+    {
+        return 'praw';
     }
 
     protected function getReportFactory()

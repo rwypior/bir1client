@@ -13,10 +13,14 @@ class ActivityReportFactory
      */
     public function createFromArray($source, string $prefix = 'praw')
     {
+        $underscore = '';
+        if ($prefix == 'fiz')
+            $underscore = '_';
+
         $report = new ActivityReport(
-            $source["{$prefix}_pkdKod"],
-            $source["{$prefix}_pkdNazwa"],
-            $source["{$prefix}_pkdPrzewazajace"] == 1
+            $source["{$prefix}_pkd{$underscore}Kod"],
+            $source["{$prefix}_pkd{$underscore}Nazwa"],
+            $source["{$prefix}_pkd{$underscore}Przewazajace"] == 1
         );
 
         return $report;
